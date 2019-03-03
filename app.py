@@ -118,24 +118,24 @@ class UserListView(BaseView):
         ]
         return self.render('admin/user_list.html', users=users)
 
+    @expose('/handle_data', methods=['POST'])
+    def handle_data(self):
+        # print(request.get_json(force=True))
+        # date_value = request.form['date']
+        # status = request.form['status']
+        data = request.form.to_dict()
+        print(data)
+        # data = request.form
+        # print(data)
+        print(data.get("name"))
+
+        return redirect(url_for("userlist.index"))
+
 # Flask views
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    # print(request.get_json(force=True))
-    # date_value = request.form['date']
-    # status = request.form['status']
-    data = request.form.to_dict()
-    print(data)
-    # data = request.form
-    # print(data)
-    print(data.get("name"))
-
-    return jsonify({})
 
 
 # Create admin

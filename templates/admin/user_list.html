@@ -52,7 +52,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
         // alert("I am about to POST this:\n\n" + dat);
 
           $.ajax({
-              url: '/handle_data',
+              url: '/userlist.handle_data',
               // data:   JSON.stringify({name: 'hallo', article: 'test'}),
               // contentType: 'application/json;charset=UTF-8',
               type: 'POST',
@@ -99,7 +99,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
             <td>{{user.visits}}</td>
             <td>¥ {{user.pay}}</td>
             <td>
-            <form class="form-inline" method="POST" action="{{ url_for('handle_data') }} " name="myform">
+            <form class="form-inline" method="POST" action="{{ url_for('userlist.handle_data') }} " name="myform">
               <div class="form-group mb-4">
                 <div class="input-group date" data-provide="datepicker">
                     <input type="text" class="form-control" placeholder="Expire Date" name="date">
