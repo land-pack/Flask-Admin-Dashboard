@@ -1,6 +1,6 @@
 #!venv/bin/python
 import os
-from flask import Flask, url_for, redirect, render_template, request, abort
+from flask import Flask, url_for, redirect, render_template, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required, current_user
@@ -80,7 +80,7 @@ class MyModelView(sqla.ModelView):
 
     # can_edit = True
     edit_modal = True
-    create_modal = True    
+    create_modal = True
     can_export = True
     can_view_details = True
     details_modal = True
@@ -99,10 +99,44 @@ class CustomView(BaseView):
     def index(self):
         return self.render('admin/custom_index.html')
 
+
+class UserListView(BaseView):
+    @expose('/')
+    def index(self):
+
+        users = [
+            {
+                "id": 13,
+                "first_name": "frank",
+                "last_name": "ak",
+                "age": 27,
+                "email": "ak@gmail.com",
+                "registed": "03/12/2019",
+                "visits": 23,
+                "pay": 199.00
+            }
+        ]
+        return self.render('admin/user_list.html', users=users)
+
 # Flask views
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    # print(request.get_json(force=True))
+    # date_value = request.form['date']
+    # status = request.form['status']
+    data = request.form.to_dict()
+    print(data)
+    # data = request.form
+    # print(data)
+    print(data.get("name"))
+
+    return jsonify({})
+
 
 # Create admin
 admin = flask_admin.Admin(
@@ -116,6 +150,7 @@ admin = flask_admin.Admin(
 admin.add_view(MyModelView(Role, db.session, menu_icon_type='fa', menu_icon_value='fa-server', name="Roles"))
 admin.add_view(UserView(User, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="Users"))
 admin.add_view(CustomView(name="Custom view", endpoint='custom', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
+admin.add_view(UserListView(name="User List view", endpoint='userlist', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
 
 # define a context processor for merging flask-admin's template context into the
 # flask-security views.

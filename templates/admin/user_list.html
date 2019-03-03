@@ -1,0 +1,164 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+{% if current_user.is_authenticated %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    User Manage Page.
+    <small>This is a user mange page, you have to very care to do any operations here.</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Custom</li>
+  </ol>
+</section>
+
+<style media="screen">
+  table.table-bordered{
+    border:1px solid #92a8d1;
+    margin-top:20px;
+  }
+table.table-bordered > thead > tr > th{
+    border:1px solid #92a8d1;
+}
+table.table-bordered > tbody > tr > th{
+    border:1px solid #92a8d1;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid #92a8d1;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+</style>
+
+<script type="text/javascript">
+  function sendplace() {
+      $('#placebutton').click(function() {
+        // var frm = $(document.myform);
+        // var dat = JSON.stringify(frm.serializeArray());
+        //
+        // alert("I am about to POST this:\n\n" + dat);
+
+          $.ajax({
+              url: '/handle_data',
+              // data:   JSON.stringify({name: 'hallo', article: 'test'}),
+              // contentType: 'application/json;charset=UTF-8',
+              type: 'POST',
+              success: function(response) {
+                  console.log(response);
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+            })
+          }
+        }
+
+</script>
+
+<section class="content">
+
+  <div class="row">
+    <!-- Left col -->
+    <section class="container">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col"> <p class="text-light bg-dark">#</p></th>
+            <th scope="col"> <p class="text-light bg-dark">First</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Last</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Age</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Email</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Registed</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Visits</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Pay</p></th>
+            <th scope="col"> <p class="text-light bg-dark">Operations</p></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for user in users %}
+            <th scope="row">{{user.id}}</th>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.age}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.registed}}</td>
+            <td>{{user.visits}}</td>
+            <td>¥ {{user.pay}}</td>
+            <td>
+            <form class="form-inline" method="POST" action="{{ url_for('handle_data') }} " name="myform">
+              <div class="form-group mb-4">
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" placeholder="Expire Date" name="date">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+                <input type="text" class="form-control" id="days" placeholder="Left days" name="days">
+                <input type="checkbox" checked data-toggle="toggle" name="status">
+                <input type="hidden" id="custId" name="custId" value="{{user.id}}">
+                <button type="submit" class="btn btn-primary" id="placebutton" >Confirm</button>
+              </div>
+            </form>
+            </td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+
+    </section>
+    <!-- /.Left col -->
+
+  </div>
+  <!-- /.row (main row) -->
+
+</section>
+<!-- /.content -->
+{% else %}
+
+<center>
+  <section class="content" style="color: white">
+    <div class="col-sm-12">
+      <h1>Flask-Admin example</h1>
+      <p class="lead">
+        Authentication
+      </p>
+      <p>
+        This example shows how you can use Flask-Admin in an admin template, <br> here I used AdminLTE and <a href="https://pythonhosted.org/Flask-Security/index.html" target="_blank">Flask-Security</a> for authentication.
+      </p>
+      {% if not current_user.is_authenticated %}
+      <p>You can register as a regular user, or log in as a superuser with the following credentials: <br><br>
+
+        email: <b>admin</b> <br>
+        password: <b>admin</b> <br>
+        <br>
+        <p>
+          <a class="btn btn-primary" href="{{ url_for('security.login') }}">Login</a> <a class="btn btn-default" href="{{ url_for('security.register') }}">Register</a>
+        </p>
+        {% endif %}
+        <br>
+        <p>
+          <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+        </p>
+      </div>
+    </section>
+  </center>
+
+  <br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br>
+  {% endif %}
+
+  {% endblock body %}
